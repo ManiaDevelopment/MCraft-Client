@@ -20,10 +20,16 @@ import java.util.Map;
  */
 public class MinecraftStandalone
 {
+	/**
+	 * Default constructor.
+	 */
 	public MinecraftStandalone()
 	{
 	}
 
+	/**
+	 * Start Minecraft Classic.
+	 */
 	public void startMinecraft()
 	{
 		MinecraftFrame minecraftFrame = new MinecraftFrame();
@@ -31,8 +37,14 @@ public class MinecraftStandalone
 		minecraftFrame.startMinecraft();
 	}
 
+	/**
+	 * A class representing the Minecraft Classic game.
+	 */
 	private class MinecraftFrame extends JFrame
 	{
+		/**
+		 * Default constructor.
+		 */
 		public MinecraftFrame()
 		{
 			setSize(854, 480);
@@ -50,8 +62,14 @@ public class MinecraftStandalone
 			});
 		}
 
+		/**
+		 * Minecraft reference.
+		 */
 		private Minecraft minecraft;
 
+		/**
+		 * Start Minecraft Classic.
+		 */
 		public void startMinecraft()
 		{
 			MCraftApplet applet = new MCraftApplet();
@@ -93,13 +111,24 @@ public class MinecraftStandalone
 			}).start();
 		}
 
+		/**
+		 * Override the MinecraftApplet class because we need to fake the Document Base and Code Base.
+		 */
 		private class MCraftApplet extends MinecraftApplet
 		{
+			/**
+			 * Default constructor.
+			 */
 			public MCraftApplet()
 			{
 				parameters = new HashMap<String, String>();
 			}
 
+			/**
+			 * Fake the Document Base.
+			 *
+			 * @return new URL("http://minecraft.net:80/play.jsp")
+			 */
 			@Override
 			public URL getDocumentBase()
 			{
@@ -112,6 +141,11 @@ public class MinecraftStandalone
 				return null;
 			}
 
+			/**
+			 * Fake the Code Base.
+			 *
+			 * @return new URL("http://minecraft.net:80/")
+			 */
 			@Override
 			public URL getCodeBase()
 			{
@@ -124,21 +158,39 @@ public class MinecraftStandalone
 				return null;
 			}
 
+			/**
+			 * Return our own parameters variable.
+			 *
+			 * @param name
+			 * @return
+			 */
 			@Override
 			public String getParameter(String name)
 			{
 				return parameters.get(name);
 			}
 
+			/**
+			 * Use our own parameters map.
+			 */
 			private Map<String, String> parameters;
 		}
 
+		/**
+		 * A canvas for the Minecraft thread.
+		 */
 		private class MinecraftCanvas extends Canvas
 		{
+			/**
+			 * Default constructor.
+			 */
 			public MinecraftCanvas()
 			{
 			}
 
+			/**
+			 * Start the thread.
+			 */
 			@Override
 			public synchronized void addNotify()
 			{
@@ -147,6 +199,9 @@ public class MinecraftStandalone
 				startThread();
 			}
 
+			/**
+			 * Stop the thread.
+			 */
 			@Override
 			public synchronized void removeNotify()
 			{
@@ -157,14 +212,28 @@ public class MinecraftStandalone
 
 			private static final long serialVersionUID = 1L;
 
+			/**
+			 * The Minecraft variable.
+			 */
 			private Minecraft minecraft;
+			/**
+			 * The Minecraft thread.
+			 */
 			private Thread thread;
 
+			/**
+			 * Set the "minecraft" variable.
+			 *
+			 * @param minecraft The new Minecraft variable.
+			 */
 			public void setMinecraft(Minecraft minecraft)
 			{
 				this.minecraft = minecraft;
 			}
 
+			/**
+			 * Start the Minecraft client thread.
+			 */
 			private synchronized void startThread()
 			{
 				if(thread == null)
@@ -175,6 +244,9 @@ public class MinecraftStandalone
 				}
 			}
 
+			/**
+			 * Stop the Minecraft client.
+			 */
 			private synchronized void stopThread()
 			{
 				if(thread != null)
