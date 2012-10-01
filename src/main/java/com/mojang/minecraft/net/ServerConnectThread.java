@@ -1,5 +1,6 @@
 package com.mojang.minecraft.net;
 
+import com.maniadevelopment.mcraft.client.util.Constants;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gui.ErrorScreen;
 import com.mojang.net.NetworkHandler;
@@ -27,7 +28,7 @@ public class ServerConnectThread extends Thread
 			netManager.netHandler = new NetworkHandler(server, port);
 			netManager.netHandler.netManager = netManager;
 
-			netManager.netHandler.send(PacketType.IDENTIFICATION, new Object[]{Byte.valueOf((byte)7), this.username, this.key, Integer.valueOf(0)});
+			netManager.netHandler.send(PacketType.IDENTIFICATION, new Object[]{Byte.valueOf(Constants.PROTOCOL_VERSION), this.username, this.key, Integer.valueOf(Constants.CLIENT_TYPE)});
 
 			netManager.successful = true;
 		} catch (Exception var3) {
