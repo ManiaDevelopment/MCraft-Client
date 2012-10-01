@@ -225,7 +225,12 @@ public final class Minecraft implements Runnable {
       Minecraft var5 = this;
       if(!this.levelLoaded) {
          try {
-            LevelIO.save(var5.level, (OutputStream)(new FileOutputStream(new File(mcDir, "level.dat"))));
+			 if(var5.level.creativeMode)
+			 {
+				 LevelIO.save(var5.level, (OutputStream)(new FileOutputStream(new File(mcDir, "levelc.dat"))));
+			 } else {
+				 LevelIO.save(var5.level, (OutputStream)(new FileOutputStream(new File(mcDir, "levels.dat"))));
+			 }
          } catch (Exception var2) {
             var2.printStackTrace();
          }
@@ -344,9 +349,16 @@ public final class Minecraft implements Runnable {
                   var1.loadOnlineLevel(var1.levelName, var1.levelId);
                } else if(!var1.levelLoaded) {
                   Level var11 = null;
-                  if((var11 = var1.levelIo.load((InputStream)(new FileInputStream(new File(mcDir, "level.dat"))))) != null) {
-                     var1.setLevel(var11);
-                  }
+				   if(gamemode instanceof CreativeGameMode)
+				   {
+					   if((var11 = var1.levelIo.load((InputStream)(new FileInputStream(new File(mcDir, "levelc.dat"))))) != null) {
+						   var1.setLevel(var11);
+					   }
+				   } else if(gamemode instanceof SurvivalGameMode) {
+					   if((var11 = var1.levelIo.load((InputStream)(new FileInputStream(new File(mcDir, "levels.dat"))))) != null) {
+						   var1.setLevel(var11);
+					   }
+				   }
                }
             } catch (Exception var54) {
                var54.printStackTrace();
