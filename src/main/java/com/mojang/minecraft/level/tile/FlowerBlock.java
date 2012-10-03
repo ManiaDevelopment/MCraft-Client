@@ -1,6 +1,7 @@
 package com.mojang.minecraft.level.tile;
 
 import com.mojang.minecraft.level.Level;
+import com.mojang.minecraft.phys.AABB;
 import com.mojang.minecraft.render.ShapeRenderer;
 import com.mojang.util.MathHelper;
 
@@ -85,4 +86,10 @@ public class FlowerBlock extends Block {
       shapeRenderer.color(1.0F, 1.0F, 1.0F);
       this.render(shapeRenderer, (float)-2, 0.0F, 0.0F);
    }
+
+	@Override
+	public AABB getCollisionBox(int x, int y, int z)
+	{
+		return null;
+	}
 }

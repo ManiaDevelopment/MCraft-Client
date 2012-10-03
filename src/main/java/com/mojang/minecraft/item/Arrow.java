@@ -7,9 +7,9 @@ import com.mojang.minecraft.player.Player;
 import com.mojang.minecraft.render.ShapeRenderer;
 import com.mojang.minecraft.render.TextureManager;
 import com.mojang.util.MathHelper;
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class Arrow extends Entity
 {
@@ -155,6 +155,7 @@ public class Arrow extends Entity
 
 				for(xRot = (float)(Math.atan2((double)yd, (double)unknown6) * 180.0D / 3.1415927410125732D); xRot - xRotO < -180.0F; xRotO -= 360.0F)
 				{
+					System.out.println("test");
 					// TODO: ?.
 				}
 
