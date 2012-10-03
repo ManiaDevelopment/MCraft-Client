@@ -98,7 +98,7 @@ public final class Minecraft implements Runnable {
    private int lastClick;
    public boolean raining;
 
-	private File mcDir;
+	public static File mcDir;
 
 
    public Minecraft(Canvas var1, MinecraftApplet var2, int var3, int var4, boolean var5) {

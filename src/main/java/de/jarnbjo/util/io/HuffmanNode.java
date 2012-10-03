@@ -23,6 +23,7 @@
 package de.jarnbjo.util.io;
 
 import java.io.IOException;
+import de.jarnbjo.util.io.BitInputStream;
 
 /**
  *  Representation of a node in a Huffman tree, used to read

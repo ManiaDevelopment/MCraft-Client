@@ -21,8 +21,17 @@ import java.util.List;
  * Date: 9/30/12
  * Time: 10:36 PM
  */
+
+/**
+ * Way to manage textures.
+ */
 public class TextureManager
 {
+	/**
+	 * Create a new texture manager and pass in the game settings.
+	 *
+	 * @param gameSettings
+	 */
 	public TextureManager(GameSettings gameSettings)
 	{
 		this.gameSettings = gameSettings;
@@ -34,14 +43,38 @@ public class TextureManager
 		animations = new ArrayList<TextureFX>();
 	}
 
+	/**
+	 * The game settings.
+	 */
 	public GameSettings gameSettings;
 
+	/**
+	 * A map of all the texture names with their ID.
+	 */
 	public HashMap<String, Integer> textures;
+	/**
+	 * A map of all the texture ID's with their image.
+	 */
 	public HashMap<Integer, BufferedImage> textureImages;
+	/**
+	 * The buffer for the texture ID.
+	 */
 	public IntBuffer idBuffer;
+	/**
+	 * The buffer of the texture image.
+	 */
 	public ByteBuffer textureBuffer;
+	/**
+	 * A list of all the block animations.
+	 */
 	public List<TextureFX> animations;
 
+	/**
+	 * Load a texture from the Minecraft Classic jar by name.
+	 *
+	 * @param name The file name.
+	 * @return The texture ID.
+	 */
 	public int load(String name)
 	{
 		Integer integer = textures.get(name);
@@ -91,6 +124,12 @@ public class TextureManager
 		return bi;
 	}
 
+	/**
+	 * Load a texture from the Minecraft Classic jar by bufferedimage.
+	 *
+	 * @param image The image.
+	 * @return The texture ID.
+	 */
 	public int load(BufferedImage image)
 	{
 		idBuffer.clear();
@@ -106,6 +145,12 @@ public class TextureManager
 		return textureID;
 	}
 
+	/**
+	 * Actually load the texture.
+	 *
+	 * @param image The texture image.
+	 * @param textureID The texture ID.
+	 */
 	public void load(BufferedImage image, int textureID)
 	{
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
@@ -140,6 +185,11 @@ public class TextureManager
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, textureBuffer);
 	}
 
+	/**
+	 * Register an animation.
+	 *
+	 * @param fx The FX/animation.
+	 */
 	public void registerAnimation(TextureFX fx)
 	{
 		animations.add(fx);

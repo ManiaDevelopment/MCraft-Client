@@ -6,6 +6,7 @@ package com.maniadevelopment.mcraft.client.util;
  * Date: 9/30/12
  * Time: 7:57 PM
  */
+
 public class Constants
 {
 	/**

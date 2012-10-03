@@ -8,8 +8,17 @@ import com.maniadevelopment.mcraft.client.minecraft.settings.GameSettings;
  * Date: 9/30/12
  * Time: 10:22 PM
  */
+
+/**
+ * Handles inputs from the client.
+ */
 public class InputHandler
 {
+	/**
+	 * Initiate InputHandler and pass in the GameSettings.
+	 *
+	 * @param gameSettings The Minecraft settings.
+	 */
 	public InputHandler(GameSettings gameSettings)
 	{
 		this.gameSettings = gameSettings;
@@ -21,14 +30,32 @@ public class InputHandler
 		keyStates = new boolean[10];
 	}
 
+	/**
+	 * The Minecraft settings.
+	 */
 	public GameSettings gameSettings;
 
+	/**
+	 * Player X movement direction.
+	 */
 	public float xxa;
+	/**
+	 * Player Y movement direction.
+	 */
 	public float yya;
+	/**
+	 * Player jumping.
+	 */
 	public boolean jumping;
 
+	/**
+	 * The states of registered keys.
+	 */
 	public boolean[] keyStates;
 
+	/**
+	 * Update the player movement variables.
+	 */
 	public void updateMovement()
 	{
 		xxa = 0.0F;
@@ -57,6 +84,12 @@ public class InputHandler
 		jumping = keyStates[4];
 	}
 
+	/**
+	 * Set a registered key state.
+	 *
+	 * @param key The key ID.
+	 * @param state The state (true = pressed down; false = not pressed down).
+	 */
 	public void setKeyState(int key, boolean state)
 	{
 		byte index = -1;
@@ -92,6 +125,9 @@ public class InputHandler
 		}
 	}
 
+	/**
+	 * Clear the registered keys.
+	 */
 	public void resetKeys()
 	{
 		for(int i = 0; i < keyStates.length; ++i)

@@ -30,6 +30,11 @@ import java.io.*;
 
 import de.jarnbjo.util.io.BitInputStream;
 
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+
 /**
  */
 

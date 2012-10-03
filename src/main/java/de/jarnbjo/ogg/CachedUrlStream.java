@@ -83,15 +83,15 @@ public class CachedUrlStream implements PhysicalOggStream {
       new Thread(loaderThread).start();
 
       while(!loaderThread.isBosDone() || pageOffsets.size()<20) {
-         System.out.print("pageOffsets.size(): "+pageOffsets.size()+"\r");
+         //System.out.print("pageOffsets.size(): "+pageOffsets.size()+"\r");
          try {
             Thread.sleep(200);
          }
          catch (InterruptedException ex) {
          }
       }
-      System.out.println();
-      System.out.println("caching "+pageOffsets.size()+"/20 pages\r");
+      //System.out.println();
+      //System.out.println("caching "+pageOffsets.size()+"/20 pages\r");
    }
 
    public Collection getLogicalStreams() {

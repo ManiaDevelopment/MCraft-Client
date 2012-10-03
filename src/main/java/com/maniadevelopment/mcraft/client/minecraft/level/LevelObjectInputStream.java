@@ -13,8 +13,18 @@ import java.util.Set;
  * Date: 9/30/12
  * Time: 9:59 PM
  */
+
+/**
+ * Custom input stream for loading levels.
+ */
 public class LevelObjectInputStream extends ObjectInputStream
 {
+	/**
+	 * Construct a new LevelObjectInputStream.
+	 *
+	 * @param in Level input stream.
+	 * @throws IOException
+	 */
 	public LevelObjectInputStream(InputStream in) throws IOException
 	{
 		super(in);
@@ -22,6 +32,13 @@ public class LevelObjectInputStream extends ObjectInputStream
 		classes.add("Player$1");
 	}
 
+	/**
+	 * Read the classes instead of super.
+	 *
+	 * @return Bla.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	@Override
 	protected ObjectStreamClass readClassDescriptor() throws IOException, ClassNotFoundException
 	{
@@ -30,5 +47,8 @@ public class LevelObjectInputStream extends ObjectInputStream
 		return classes.contains(osc.getName()) ? ObjectStreamClass.lookup(Class.forName(osc.getName())) : osc;
 	}
 
+	/**
+	 * Classes to read.
+	 */
 	public Set<String> classes = new HashSet<String>();
 }

@@ -18,6 +18,10 @@ import java.util.Map;
  * Date: 9/30/12
  * Time: 7:16 PM
  */
+
+/**
+ * Run Minecraft Classic standalone version.
+ */
 public class MinecraftStandalone
 {
 	/**
@@ -109,6 +113,36 @@ public class MinecraftStandalone
 					}
 				}
 			}).start();
+
+			boolean pass = false;
+
+			while(!pass)
+			{
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				if(minecraft.running)
+				{
+					pass = true;
+				}
+			}
+
+			// DO SHIT...?
+
+			/*try {
+				int num = 1 + (int)(Math.random() * ((3 - 1) + 1));
+				File file = new File(Minecraft.mcDir + "\\resources\\music\\calm" + num + ".ogg");
+				System.out.println(file.exists());
+				FileInputStream fis = new FileInputStream(file);
+				OggClip calm1Clip = new OggClip(fis);
+
+				calm1Clip.loop();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}*/
 		}
 
 		/**

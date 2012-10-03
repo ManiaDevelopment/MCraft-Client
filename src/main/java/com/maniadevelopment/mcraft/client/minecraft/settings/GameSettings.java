@@ -11,8 +11,17 @@ import java.io.*;
  * Date: 9/30/12
  * Time: 10:04 PM
  */
+
+/**
+ * Handle the game settings and bindings.
+ */
 public class GameSettings
 {
+	/**
+	 * Create a new GameSettings and pass in the minecraft folder.
+	 *
+	 * @param minecraftFolder
+	 */
 	public GameSettings(File minecraftFolder)
 	{
 		settingsFile = new File(minecraftFolder, "settings.txt");
@@ -39,31 +48,97 @@ public class GameSettings
 		loadBindings();
 	}
 
+	/**
+	 * The file for the settings.
+	 */
 	public File settingsFile;
+	/**
+	 * The file for the bindings.
+	 */
 	public File bindingsFile;
+	/**
+	 * The amount of settings.
+	 */
 	public int settingsCount;
-	
+
+	/**
+	 * The possible options for the render distance setting.
+	 */
 	public String[] renderDistances;
-	
+
+	/**
+	 * Enable music.
+	 */
 	public boolean music = true;
+	/**
+	 * Enable sound.
+	 */
 	public boolean sound = true;
+	/**
+	 * Invert the mouse.
+	 */
 	public boolean invertMouse = false;
+	/**
+	 * Show the frame rate.
+	 */
 	public boolean showFrameRate = false;
+	/**
+	 * The current view distance setting.
+	 */
 	public int viewDistance = 0;
+	/**
+	 * View bobbing.
+	 */
 	public boolean viewBobbing = true;
+	/**
+	 * Limit the framerate.
+	 */
 	public boolean limitFramerate = false;
 
+	/**
+	 * All of the bindings.
+	 */
 	public KeyBinding[] bindings;
-	
+
+	/**
+	 * Binding for the move forward.
+	 */
 	public KeyBinding forwardKey;
+	/**
+	 * Binding for the move left.
+	 */
 	public KeyBinding leftKey;
+	/**
+	 * Binding for the move back.
+	 */
 	public KeyBinding backKey;
+	/**
+	 * Binding for the move right.
+	 */
 	public KeyBinding rightKey;
+	/**
+	 * Binding for the jump.
+	 */
 	public KeyBinding jumpKey;
+	/**
+	 * Binding for the show inventory.
+	 */
 	public KeyBinding buildKey;
+	/**
+	 * Binding for the chat display.
+	 */
 	public KeyBinding chatKey;
+	/**
+	 * Binding to toggle the fog.
+	 */
 	public KeyBinding toggleFogKey;
+	/**
+	 * Binding to save the player's location.
+	 */
 	public KeyBinding saveLocationKey;
+	/**
+	 * Binding to load the player's saved location.
+	 */
 	public KeyBinding loadLocationKey;
 
 	public void setBinding(int key, int keyID)
@@ -73,11 +148,23 @@ public class GameSettings
 		saveBindings();
 	}
 
+	/**
+	 * Get a binding name and keyboard name by the key ID.
+	 *
+	 * @param key The key ID.
+	 * @return The binding name and key name.
+	 */
 	public String getBinding(int key)
 	{
 		return bindings[key].name + ": " + Keyboard.getKeyName(bindings[key].key);
 	}
 
+	/**
+	 * Toggle or run through a setting.
+	 *
+	 * @param setting The setting number.
+	 * @param fogValue The fog value if we are changing the fog.
+	 */
 	public void toggleSetting(int setting, int fogValue)
 	{
 		if(setting == 0)
@@ -118,6 +205,12 @@ public class GameSettings
 		saveSettings();
 	}
 
+	/**
+	 * Get a setting by the ID.
+	 *
+	 * @param ID The setting ID.
+	 * @return The setting name and value.
+	 */
 	public String getSetting(int ID)
 	{
 		return ID == 0 ? "Music: " + (music ? "ON" : "OFF")
@@ -130,6 +223,9 @@ public class GameSettings
 				: ""))))));
 	}
 
+	/**
+	 * Load the settings.
+	 */
 	private void loadSettings()
 	{
 		try
@@ -199,6 +295,9 @@ public class GameSettings
 		}
 	}
 
+	/**
+	 * Load the bindings.
+	 */
 	private void loadBindings()
 	{
 		try
@@ -241,6 +340,9 @@ public class GameSettings
 		}
 	}
 
+	/**
+	 * Save the settings.
+	 */
 	private void saveSettings()
 	{
 		try
@@ -267,6 +369,9 @@ public class GameSettings
 		}
 	}
 
+	/**
+	 * Save the bindings.
+	 */
 	private void saveBindings()
 	{
 		try
