@@ -48,7 +48,7 @@ public final class GameSettings
 	public int settingCount;
 
 	public int smoothing = 0;
-	public String[] smoothingOptions = new String[] {"OFF", "1", "2", "3"};
+	public String[] smoothingOptions = new String[] {"OFF", "Automatic", "Custom"};
 
 	public String getBinding(int key)
 	{

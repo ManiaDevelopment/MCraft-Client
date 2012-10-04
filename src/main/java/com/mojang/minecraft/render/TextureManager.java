@@ -132,9 +132,11 @@ public class TextureManager
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 		if(settings.smoothing > 0)
 		{
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 2);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_BASE_LEVEL, 0);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 4);
 		} else {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
@@ -177,38 +179,116 @@ public class TextureManager
 
 		if(settings.smoothing > 0)
 		{
-			switch(settings.smoothing)
+			if(settings.smoothing == 1)
 			{
-				case 1:
+				ContextCapabilities capabilities = GLContext.getCapabilities();
+
+				if(capabilities.OpenGL30)
+				{
 					if(previousMipmapMode != settings.smoothing)
 					{
 						System.out.println("Using OpenGL 3.0 for mipmap generation.");
 					}
 
 					GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-					break;
-				case 2:
+				} else if(capabilities.GL_EXT_framebuffer_object) {
 					if(previousMipmapMode != settings.smoothing)
 					{
 						System.out.println("Using GL_EXT_framebuffer_object extension for mipmap generation.");
 					}
 
 					EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_2D);
-					break;
-				case 3:
+				} else if(capabilities.OpenGL14) {
 					if(previousMipmapMode != settings.smoothing)
 					{
-						System.out.println("Using GL_GENERATE_MIPMAP for mipmap generation. This might slow down with large textures.");
+						System.out.println("Using OpenGL 1.4 for mipmap generation.");
 					}
 
 					GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
-					break;
+				}
+			} else if(settings.smoothing == 2) {
+				if(previousMipmapMode != settings.smoothing)
+				{
+					System.out.println("Using custom system for mipmap generation.");
+				}
+
+				generateMipMaps(textureBuffer, width, height);
 			}
 
 			GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.3F);
 		}
 
 		previousMipmapMode = settings.smoothing;
+	}
+
+	public void generateMipMaps(ByteBuffer data, int width, int height)
+	{
+		ByteBuffer mipData = data;
+
+		for (int level = 1; level <= 4; level++)
+		{
+			int parWidth = width >> level - 1;
+			int mipWidth = width >> level;
+			int mipHeight = height >> level;
+
+			if(mipWidth <= 0 || mipHeight <= 0)
+			{
+				break;
+			}
+
+			ByteBuffer mipData1 = BufferUtils.createByteBuffer(data.capacity());
+
+			mipData1.clear();
+
+			for (int mipX = 0; mipX < mipWidth; mipX++)
+			{
+				for (int mipY = 0; mipY < mipHeight; mipY++)
+				{
+					int p1 = mipData.getInt((mipX * 2 + 0 + (mipY * 2 + 0) * parWidth) * 4);
+					int p2 = mipData.getInt((mipX * 2 + 1 + (mipY * 2 + 0) * parWidth) * 4);
+					int p3 = mipData.getInt((mipX * 2 + 1 + (mipY * 2 + 1) * parWidth) * 4);
+					int p4 = mipData.getInt((mipX * 2 + 0 + (mipY * 2 + 1) * parWidth) * 4);
+
+					int pixel = b(b(p1, p2), b(p3, p4));
+
+					mipData1.putInt((mipX + mipY * mipWidth) * 4, pixel);
+				}
+			}
+
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, level, GL11.GL_RGBA, mipWidth, mipHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, mipData1);
+
+			mipData = mipData1;
+		}
+	}
+
+	private int b(int c1, int c2)
+	{
+		int a1 = (c1 & 0xFF000000) >> 24 & 0xFF;
+		int a2 = (c2 & 0xFF000000) >> 24 & 0xFF;
+
+		int ax = (a1 + a2) / 2;
+		if (ax > 255) {
+			ax = 255;
+		}
+		if (a1 + a2 <= 0)
+		{
+			a1 = 1;
+			a2 = 1;
+			ax = 0;
+		}
+
+		int r1 = (c1 >> 16 & 0xFF) * a1;
+		int g1 = (c1 >> 8 & 0xFF) * a1;
+		int b1 = (c1 & 0xFF) * a1;
+
+		int r2 = (c2 >> 16 & 0xFF) * a2;
+		int g2 = (c2 >> 8 & 0xFF) * a2;
+		int b2 = (c2 & 0xFF) * a2;
+
+		int rx = (r1 + r2) / (a1 + a2);
+		int gx = (g1 + g2) / (a1 + a2);
+		int bx = (b1 + b2) / (a1 + a2);
+		return ax << 24 | rx << 16 | gx << 8 | bx;
 	}
 
 	public void registerAnimation(TextureFX FX)
