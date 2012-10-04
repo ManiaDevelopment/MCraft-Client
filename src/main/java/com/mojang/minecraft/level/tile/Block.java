@@ -114,6 +114,11 @@ public class Block
 		this.stepsound = soundType;
 		this.hardness = (int)(hardness * 20.0F);
 
+		if(this instanceof FlowerBlock)
+		{
+			stepsound = Tile$SoundType.grass;
+		}
+
 		return this;
 	}
 
