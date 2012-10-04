@@ -1,16 +1,12 @@
 package com.mojang.minecraft;
 
 import com.mojang.minecraft.render.TextureManager;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import javax.imageio.ImageIO;
 import org.lwjgl.input.Keyboard;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.Iterator;
 
 public final class GameSettings
 {
@@ -18,7 +14,7 @@ public final class GameSettings
 	{
 		bindings = new KeyBinding[] {forwardKey, leftKey, backKey, rightKey, jumpKey, buildKey, chatKey, toggleFogKey, saveLocationKey, loadLocationKey};
 
-		settingCount = 8;
+		settingCount = 9;
 
 		this.minecraft = minecraft;
 
@@ -50,6 +46,9 @@ public final class GameSettings
 	private Minecraft minecraft;
 	private File settingsFile;
 	public int settingCount;
+
+	public int smoothing = 0;
+	public String[] smoothingOptions = new String[] {"OFF", "1", "2", "3"};
 
 	public String getBinding(int key)
 	{
@@ -142,6 +141,21 @@ public final class GameSettings
 			limitFramerate = !limitFramerate;
 		}
 
+		if(setting == 8)
+		{
+			if(smoothing == smoothingOptions.length - 1)
+			{
+				smoothing = 0;
+			} else {
+				smoothing++;
+			}
+
+			minecraft.textureManager.textures.clear();
+			minecraft.textureManager.textureImages.clear();
+
+			minecraft.levelRenderer.refresh();
+		}
+
 		save();
 	}
 
@@ -155,7 +169,8 @@ public final class GameSettings
 				: (id == 5 ? "View bobbing: " + (viewBobbing ? "ON" : "OFF")
 				: (id == 6 ? "3d anaglyph: " + (anaglyph ? "ON" : "OFF")
 				: (id == 7 ? "Limit framerate: " + (limitFramerate ? "ON" : "OFF")
-				: "")))))));
+				: (id == 8 ? "Smoothing: " + smoothingOptions[smoothing]
+				: ""))))))));
 	}
 
 	private void load()
@@ -213,6 +228,11 @@ public final class GameSettings
 						limitFramerate = setting[1].equals("true");
 					}
 
+					if(setting[0].equals("smoothing"))
+					{
+						smoothing = Integer.parseInt(setting[1]);
+					}
+
 					for(int index = 0; index < this.bindings.length; index++)
 					{
 						if(setting[0].equals("key_" + bindings[index].name))
@@ -245,6 +265,8 @@ public final class GameSettings
 			writer.println("bobView:" + viewBobbing);
 			writer.println("anaglyph3d:" + anaglyph);
 			writer.println("limitFramerate:" + limitFramerate);
+
+			writer.println("smoothing:" + smoothing);
 
 			for(int binding = 0; binding < bindings.length; binding++)
 			{

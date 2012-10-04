@@ -1,118 +1,220 @@
 package com.mojang.minecraft.render;
 
 import com.mojang.minecraft.GameSettings;
+import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.render.texture.TextureFX;
-import java.awt.Graphics;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.*;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.imageio.ImageIO;
+import java.util.zip.ZipFile;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+public class TextureManager
+{
+	public TextureManager(GameSettings settings)
+	{
+		this.settings = settings;
 
-public class TextureManager {
+		minecraftFolder = Minecraft.mcDir;
+		texturesFolder = new File(minecraftFolder, "texturepacks");
 
-   public HashMap textures = new HashMap();
-   public HashMap textureImages = new HashMap();
-   public IntBuffer idBuffer = BufferUtils.createIntBuffer(1);
-   public ByteBuffer textureBuffer = BufferUtils.createByteBuffer(262144);
-   public List animations = new ArrayList();
-   public GameSettings settings;
+		if(!texturesFolder.exists())
+		{
+			texturesFolder.mkdir();
+		}
+	}
 
+	public HashMap<String, Integer> textures = new HashMap<String, Integer>();
+	public HashMap<Integer, BufferedImage> textureImages = new HashMap<Integer, BufferedImage>();
+	public IntBuffer idBuffer = BufferUtils.createIntBuffer(1);
+	public ByteBuffer textureBuffer = BufferUtils.createByteBuffer(262144);
+	public List<TextureFX> animations = new ArrayList<TextureFX>();
+	public GameSettings settings;
 
-   public TextureManager(GameSettings var1) {
-      this.settings = var1;
-   }
+	public HashMap<String, Integer> externalTexturePacks = new HashMap<String, Integer>();
 
-   public final int load(String var1) {
-      Integer var2;
-      if((var2 = (Integer)this.textures.get(var1)) != null) {
-         return var2.intValue();
-      } else {
-         try {
-            this.idBuffer.clear();
-            GL11.glGenTextures(this.idBuffer);
-            int var4 = this.idBuffer.get(0);
-            if(var1.startsWith("##")) {
-               this.load(load1(ImageIO.read(TextureManager.class.getResourceAsStream(var1.substring(2)))), var4);
-            } else {
-               this.load(ImageIO.read(TextureManager.class.getResourceAsStream(var1)), var4);
-            }
+	public File minecraftFolder;
+	public File texturesFolder;
 
-            this.textures.put(var1, Integer.valueOf(var4));
-            return var4;
-         } catch (IOException var3) {
-            throw new RuntimeException("!!");
-         }
-      }
-   }
+	public int previousMipmapMode;
 
-   public static BufferedImage load1(BufferedImage var0) {
-      int var1 = var0.getWidth() / 16;
-      BufferedImage var2;
-      Graphics var3 = (var2 = new BufferedImage(16, var0.getHeight() * var1, 2)).getGraphics();
+	public int load(String file)
+	{
+		if(textures.get(file) != null)
+		{
+			return textures.get(file);
+		} else if(externalTexturePacks.get(file) != null) {
+			return externalTexturePacks.get(file);
+		} else {
+			try {
+				idBuffer.clear();
 
-      for(int var4 = 0; var4 < var1; ++var4) {
-         var3.drawImage(var0, -var4 << 4, var4 * var0.getHeight(), (ImageObserver)null);
-      }
+				GL11.glGenTextures(idBuffer);
 
-      var3.dispose();
-      return var2;
-   }
+				int textureID = idBuffer.get(0);
 
-   public final int load(BufferedImage var1) {
-      this.idBuffer.clear();
-      GL11.glGenTextures(this.idBuffer);
-      int var2 = this.idBuffer.get(0);
-      this.load(var1, var2);
-      this.textureImages.put(Integer.valueOf(var2), var1);
-      return var2;
-   }
+				if(file.endsWith(".png"))
+				{
+					if(file.startsWith("##"))
+					{
+						load(load1(ImageIO.read(TextureManager.class.getResourceAsStream(file.substring(2)))), textureID);
+					} else {
+						load(ImageIO.read(TextureManager.class.getResourceAsStream(file)), textureID);
+					}
 
-   public void load(BufferedImage var1, int var2) {
-      GL11.glBindTexture(3553, var2);
-      GL11.glTexParameteri(3553, 10241, 9728);
-      GL11.glTexParameteri(3553, 10240, 9728);
-      var2 = var1.getWidth();
-      int var3 = var1.getHeight();
-      int[] var4 = new int[var2 * var3];
-      byte[] var5 = new byte[var2 * var3 << 2];
-      var1.getRGB(0, 0, var2, var3, var4, 0, var2);
+					textures.put(file, textureID);
+				} else if(file.endsWith(".zip")) {
+					ZipFile zip = new ZipFile(new File(minecraftFolder, "texturepacks/" + file));
 
-      for(int var11 = 0; var11 < var4.length; ++var11) {
-         int var6 = var4[var11] >>> 24;
-         int var7 = var4[var11] >> 16 & 255;
-         int var8 = var4[var11] >> 8 & 255;
-         int var9 = var4[var11] & 255;
-         if(this.settings.anaglyph) {
-            int var10 = (var7 * 30 + var8 * 59 + var9 * 11) / 100;
-            var8 = (var7 * 30 + var8 * 70) / 100;
-            var9 = (var7 * 30 + var9 * 70) / 100;
-            var7 = var10;
-            var8 = var8;
-            var9 = var9;
-         }
+					String terrainPNG = "terrain.png";
 
-         var5[var11 << 2] = (byte)var7;
-         var5[(var11 << 2) + 1] = (byte)var8;
-         var5[(var11 << 2) + 2] = (byte)var9;
-         var5[(var11 << 2) + 3] = (byte)var6;
-      }
+					if(zip.getEntry(terrainPNG.startsWith("/") ? terrainPNG.substring(1, terrainPNG.length()) : terrainPNG) != null)
+					{
+						load(ImageIO.read(zip.getInputStream(zip.getEntry(terrainPNG.startsWith("/") ? terrainPNG.substring(1, terrainPNG.length()) : terrainPNG))), textureID);
+					} else {
+						load(ImageIO.read(TextureManager.class.getResourceAsStream(terrainPNG)), textureID);
+					}
 
-      this.textureBuffer.clear();
-      this.textureBuffer.put(var5);
-      this.textureBuffer.position(0).limit(var5.length);
-      GL11.glTexImage2D(3553, 0, 6408, var2, var3, 0, 6408, 5121, this.textureBuffer);
-   }
+					zip.close();
 
-   public final void registerAnimation(TextureFX var1) {
-      this.animations.add(var1);
-      var1.animate();
-   }
+					externalTexturePacks.put(file, textureID);
+				}
+
+				return textureID;
+			} catch (IOException e) {
+				throw new RuntimeException("!!", e);
+			}
+		}
+	}
+
+	public static BufferedImage load1(BufferedImage image)
+	{
+		int charWidth = image.getWidth() / 16;
+		BufferedImage image1 = new BufferedImage(16, image.getHeight() * charWidth, 2);
+		Graphics graphics = image1.getGraphics();
+
+		for(int i = 0; i < charWidth; i++)
+		{
+			graphics.drawImage(image, -i << 4, i * image.getHeight(), null);
+		}
+
+		graphics.dispose();
+
+		return image1;
+	}
+
+	public int load(BufferedImage image)
+	{
+		idBuffer.clear();
+
+		GL11.glGenTextures(idBuffer);
+
+		int textureID = idBuffer.get(0);
+
+		load(image, textureID);
+
+		textureImages.put(textureID, image);
+
+		return textureID;
+	}
+
+	public void load(BufferedImage image, int textureID)
+	{
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+		if(settings.smoothing > 0)
+		{
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL12.GL_TEXTURE_MAX_LEVEL, 2);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+		} else {
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+		}
+
+		int width = image.getWidth();
+		int height = image.getHeight();
+		int[] pixels = new int[width * height];
+		byte[] color = new byte[width * height << 2];
+
+		image.getRGB(0, 0, width, height, pixels, 0, width);
+
+		for(int pixel = 0; pixel < pixels.length; pixel++)
+		{
+			int alpha = pixels[pixel] >>> 24;
+			int red = pixels[pixel] >> 16 & 0xFF;
+			int green = pixels[pixel] >> 8 & 0xFF;
+			int blue = pixels[pixel] & 0xFF;
+
+			if(settings.anaglyph)
+			{
+				int rgba3D = (red * 30 + green * 59 + blue * 11) / 100;
+
+				green = (red * 30 + green * 70) / 100;
+				blue = (red * 30 + blue * 70) / 100;
+				red = rgba3D;
+			}
+
+			color[pixel << 2] = (byte)red;
+			color[(pixel << 2) + 1] = (byte)green;
+			color[(pixel << 2) + 2] = (byte)blue;
+			color[(pixel << 2) + 3] = (byte)alpha;
+		}
+
+		textureBuffer.clear();
+		textureBuffer.put(color);
+		textureBuffer.position(0).limit(color.length);
+
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, textureBuffer);
+
+		if(settings.smoothing > 0)
+		{
+			switch(settings.smoothing)
+			{
+				case 1:
+					if(previousMipmapMode != settings.smoothing)
+					{
+						System.out.println("Using OpenGL 3.0 for mipmap generation.");
+					}
+
+					GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+					break;
+				case 2:
+					if(previousMipmapMode != settings.smoothing)
+					{
+						System.out.println("Using GL_EXT_framebuffer_object extension for mipmap generation.");
+					}
+
+					EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_2D);
+					break;
+				case 3:
+					if(previousMipmapMode != settings.smoothing)
+					{
+						System.out.println("Using GL_GENERATE_MIPMAP for mipmap generation. This might slow down with large textures.");
+					}
+
+					GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
+					break;
+			}
+
+			GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.3F);
+		}
+
+		previousMipmapMode = settings.smoothing;
+	}
+
+	public void registerAnimation(TextureFX FX)
+	{
+		animations.add(FX);
+
+		FX.animate();
+	}
 }

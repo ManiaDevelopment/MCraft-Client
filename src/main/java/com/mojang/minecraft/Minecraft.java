@@ -1282,7 +1282,7 @@ public final class Minecraft implements Runnable {
 
       for(var16 = 0; var16 < var19.animations.size(); ++var16) {
          TextureFX var3;
-         (var3 = (TextureFX)var19.animations.get(var16)).anaglyph = var19.settings.anaglyph;
+         (var3 = var19.animations.get(var16)).anaglyph = var19.settings.anaglyph;
          var3.animate();
          var19.textureBuffer.clear();
          var19.textureBuffer.put(var3.textureData);
