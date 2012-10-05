@@ -395,77 +395,75 @@ public class Mob extends Entity {
 		}
 	}
 
-	public void travel(float var1, float var2) {
-		float var3;
-		if(this.isInWater()) {
-			var3 = this.y;
-			if(ai instanceof BasicAI)
-			{
-				BasicAI ai1 = (BasicAI)ai;
+	public void travel(float yya, float xxa)
+	{
+		float y1;
+		float multiply = 1.0F;
 
-				if(ai1.running)
-				{
-					moveRelative(var1, var2, 0.02F * 1.3F);
-				} else {
-					moveRelative(var1, var2, 0.02F);
-				}
+		if(ai instanceof BasicAI)
+		{
+			BasicAI ai1 = (BasicAI)ai;
+
+			if(ai1.running)
+			{
+				multiply = 1.4F;
+			} else {
+				multiply = 1.0F;
 			}
-			//this.moveRelative(var1, var2, 0.02F);
-			this.move(this.xd, this.yd, this.zd);
-			this.xd *= 0.8F;
-			this.yd *= 0.8F;
-			this.zd *= 0.8F;
-			this.yd = (float)((double)this.yd - 0.02D);
-			if(this.horizontalCollision && this.isFree(this.xd, this.yd + 0.6F - this.y + var3, this.zd)) {
-				this.yd = 0.3F;
+		}
+
+		if(isInWater())
+		{
+			y1 = y;
+
+			moveRelative(yya, xxa, 0.02F * multiply);
+			move(xd, yd, zd);
+
+			xd *= 0.8F;
+			yd *= 0.8F;
+			zd *= 0.8F;
+
+			yd = (float)((double)yd - 0.02D);
+
+			if(horizontalCollision && isFree(xd, yd + 0.6F - y + y1, zd))
+			{
+				yd = 0.3F;
 			}
 
 		} else if(this.isInLava()) {
-			var3 = this.y;
-			if(ai instanceof BasicAI)
-			{
-				BasicAI ai1 = (BasicAI)ai;
+			y1 = y;
 
-				if(ai1.running)
-				{
-					moveRelative(var1, var2, 0.02F * 1.3F);
-				} else {
-					moveRelative(var1, var2, 0.02F);
-				}
-			}
-			//this.moveRelative(var1, var2, 0.02F);
-			this.move(this.xd, this.yd, this.zd);
-			this.xd *= 0.5F;
-			this.yd *= 0.5F;
-			this.zd *= 0.5F;
-			this.yd = (float)((double)this.yd - 0.02D);
-			if(this.horizontalCollision && this.isFree(this.xd, this.yd + 0.6F - this.y + var3, this.zd)) {
-				this.yd = 0.3F;
+			moveRelative(yya, xxa, 0.02F * multiply);
+			move(xd, yd, zd);
+
+			xd *= 0.5F;
+			yd *= 0.5F;
+			zd *= 0.5F;
+
+			yd = (float)((double)yd - 0.02D);
+
+			if(horizontalCollision && isFree(xd, yd + 0.6F - y + y1, zd))
+			{
+				yd = 0.3F;
 			}
 
 		} else {
-			if(ai instanceof BasicAI)
+			moveRelative(yya, xxa, (onGround ? 0.1F : 0.02F) * multiply);
+			move(xd, yd, zd);
+
+			xd *= 0.91F;
+			yd *= 0.98F;
+			zd *= 0.91F;
+
+			yd = (float)((double)yd - 0.08D);
+
+			if(onGround)
 			{
-				BasicAI ai1 = (BasicAI)ai;
+				y1 = 0.6F;
 
-				if(ai1.running)
-				{
-					moveRelative(var1, var2, (onGround ? 0.1F : 0.02F) * 1.3F);
-				} else {
-					moveRelative(var1, var2, onGround ? 0.1F : 0.02F);
-				}
+				xd *= y1;
+				zd *= y1;
 			}
-			this.move(this.xd, this.yd, this.zd);
-			this.xd *= 0.91F;
-			this.yd *= 0.98F;
-			this.zd *= 0.91F;
-			this.yd = (float)((double)this.yd - 0.08D);
-			if(this.onGround) {
-				var3 = 0.6F;
-				this.xd *= var3;
-				this.zd *= var3;
-			}
-
 		}
 	}
 
