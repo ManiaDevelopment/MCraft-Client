@@ -48,7 +48,7 @@ public final class GameSettings
 	public int settingCount;
 
 	public int smoothing = 0;
-	public String[] smoothingOptions = new String[] {"OFF", "Automatic", "Custom"};
+	public String[] smoothingOptions = new String[] {"OFF", "Automatic", "Universal"};
 
 	public KeyBinding runKey = new KeyBinding("Run", Keyboard.KEY_LSHIFT);
 
