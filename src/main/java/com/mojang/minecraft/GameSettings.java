@@ -12,7 +12,7 @@ public final class GameSettings
 {
 	public GameSettings(Minecraft minecraft, File minecraftFolder)
 	{
-		bindings = new KeyBinding[] {forwardKey, leftKey, backKey, rightKey, jumpKey, buildKey, chatKey, toggleFogKey, saveLocationKey, loadLocationKey};
+		bindings = new KeyBinding[] {forwardKey, leftKey, backKey, rightKey, jumpKey, buildKey, chatKey, toggleFogKey, saveLocationKey, loadLocationKey, runKey};
 
 		settingCount = 9;
 
@@ -49,6 +49,8 @@ public final class GameSettings
 
 	public int smoothing = 0;
 	public String[] smoothingOptions = new String[] {"OFF", "Automatic", "Custom"};
+
+	public KeyBinding runKey = new KeyBinding("Run", Keyboard.KEY_LSHIFT);
 
 	public String getBinding(int key)
 	{

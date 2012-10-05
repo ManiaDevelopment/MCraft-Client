@@ -3,8 +3,10 @@ package com.mojang.minecraft.player;
 public class InputHandler
 {
 	public float xxa = 0.0F;
-	public float jumping = 0.0F;
-	public boolean yya = false;
+	public float yya = 0.0F;
+	public boolean jumping = false;
+
+	public boolean running = false;
 
 	public void updateMovement()
 	{

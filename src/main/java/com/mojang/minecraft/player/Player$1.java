@@ -13,10 +13,12 @@ public class Player$1 extends BasicAI
 	@Override
 	protected void update()
 	{
-		this.jumping = player.input.yya;
+		this.jumping = player.input.jumping;
 
 		this.xxa = player.input.xxa;
-		this.yya = player.input.jumping;
+		this.yya = player.input.yya;
+
+		running = player.input.running;
 	}
 
 	public static final long serialVersionUID = 0L;

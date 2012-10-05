@@ -13,16 +13,16 @@ public class InputHandlerImpl extends InputHandler
 	public void updateMovement()
 	{
 		xxa = 0.0F;
-		jumping = 0.0F;
+		yya = 0.0F;
 
 		if(keyStates[0])
 		{
-			jumping--;
+			yya--;
 		}
 
 		if(keyStates[1])
 		{
-			jumping++;
+			yya++;
 		}
 
 		if(keyStates[2])
@@ -35,7 +35,9 @@ public class InputHandlerImpl extends InputHandler
 			xxa++;
 		}
 
-		yya = keyStates[4];
+		jumping = keyStates[4];
+
+		running = keyStates[5];
 	}
 
 	@Override
@@ -78,6 +80,11 @@ public class InputHandlerImpl extends InputHandler
 			index = 4;
 		}
 
+		if(key == settings.runKey.key)
+		{
+			index = 5;
+		}
+
 		if(index >= 0)
 		{
 			keyStates[index] = state;
@@ -85,6 +92,6 @@ public class InputHandlerImpl extends InputHandler
 
 	}
 
-	private boolean[] keyStates = new boolean[10];
+	private boolean[] keyStates = new boolean[100];
 	private GameSettings settings;
 }
