@@ -8,20 +8,20 @@ import com.mojang.minecraft.player.Inventory;
 import com.mojang.minecraft.render.ShapeRenderer;
 import com.mojang.minecraft.render.TextureManager;
 import com.mojang.util.MathHelper;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 public final class HUDScreen extends Screen {
 
    public List chat = new ArrayList();
    private Random random = new Random();
    private Minecraft mc;
-   private int width;
-   private int height;
+   public int width;
+   public int height;
    public String hoveredPlayer = null;
    public int ticks = 0;
 

@@ -52,7 +52,7 @@ public class MinecraftStandalone
 		public MinecraftFrame()
 		{
 			setSize(854, 480);
-			setResizable(false);
+			//setResizable(false);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setLayout(new BorderLayout());
 
@@ -131,18 +131,6 @@ public class MinecraftStandalone
 			}
 
 			// DO SHIT...?
-
-			/*try {
-				int num = 1 + (int)(Math.random() * ((3 - 1) + 1));
-				File file = new File(Minecraft.mcDir + "\\resources\\music\\calm" + num + ".ogg");
-				System.out.println(file.exists());
-				FileInputStream fis = new FileInputStream(file);
-				OggClip calm1Clip = new OggClip(fis);
-
-				calm1Clip.loop();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
 		}
 
 		/**

@@ -427,6 +427,20 @@ public final class Minecraft implements Runnable {
                   this.running = false;
                }
 
+				if(!Display.isFullscreen()
+						&& (canvas.getWidth() != Display.getDisplayMode().getWidth()
+						|| canvas.getHeight() != Display.getDisplayMode().getHeight()))
+				{
+					DisplayMode displayMode = new DisplayMode(canvas.getWidth(), canvas.getHeight());
+					try {
+						Display.setDisplayMode(displayMode);
+					} catch (LWJGLException e) {
+						e.printStackTrace();
+					}
+
+					resize();
+				}
+
                try {
                   Timer var63 = this.timer;
                   long var16;
@@ -1830,4 +1844,22 @@ public final class Minecraft implements Runnable {
 
       System.gc();
    }
+
+	public void resize()
+	{
+		width = Display.getDisplayMode().getWidth();
+		height = Display.getDisplayMode().getHeight();
+
+		if(hud != null)
+		{
+			hud.width = width * 240 / height;
+			hud.height = height * 240 / height;
+		}
+
+		if(currentScreen != null)
+		{
+			currentScreen.width = width * 240 / height;
+			currentScreen.height = height * 240 / height;
+		}
+	}
 }

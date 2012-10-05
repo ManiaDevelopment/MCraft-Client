@@ -1,18 +1,18 @@
 package com.mojang.minecraft.gui;
 
 import com.mojang.minecraft.Minecraft;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GuiScreen extends Screen {
 
    protected Minecraft minecraft;
-   protected int width;
-   protected int height;
+   public int width;
+   public int height;
    protected List buttons = new ArrayList();
    public boolean grabsMouse = false;
    protected FontRenderer fontRenderer;

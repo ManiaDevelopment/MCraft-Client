@@ -142,6 +142,8 @@ public class TextureManager
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		}
 
+		//GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+
 		int width = image.getWidth();
 		int height = image.getHeight();
 		int[] pixels = new int[width * height];
