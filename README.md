@@ -1,11 +1,21 @@
-MCraft-Client
-=============
+![Logo](http://i47.tinypic.com/2ynp1kl.png)
+##MCraft-Client
+A stable Minecraft Classic client designed to make your Minecraft Classic experience more enjoyable without playing in your browser.
 
-The replacement for MinecraftMania.
+##Information
+The name and software, MCraft Client, is owned by Mania Development, therefore the rightsholder of Mania Developer has full ownership over this software.
 
-License
-=======
-Copyright (c) 2012 Oliver Yasuna
+##Compilation
+We use maven to handle our dependencies.
 
+- Install [Maven 3](http://maven.apache.org/download.html)
+- Check out this repo and: `mvn clean install`
+
+##For developers
+- Found a bug? [Report it](https://github.com/ManiaDevelopment/MCraft-Client/issues).
+- [Make a pull request](https://github.com/ManiaDevelopment/MCraft-Client/pulls).
+
+##License
 The original Minecraft Classic source code is Copyright (c) 2009-2012 Mojang AB.
+<br>
 The MCraft-Client code is licensed under the <b>[MIT license](http://www.opensource.org/licenses/mit-license.html)</b>.
