@@ -212,20 +212,18 @@ public class TextureManager
 					System.out.println("Using custom system for mipmap generation.");
 				}
 
-				generateMipMaps(textureBuffer, width, height);
+				generateMipMaps(textureBuffer, width, height, false);
 			}
-
-			GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.3F);
 		}
 
 		previousMipmapMode = settings.smoothing;
 	}
 
-	public void generateMipMaps(ByteBuffer data, int width, int height)
+	public void generateMipMaps(ByteBuffer data, int width, int height, boolean test)
 	{
 		ByteBuffer mipData = data;
 
-		for (int level = 1; level <= 4; level++)
+		for (int level = test ? 0 : 1; level <= 4; level++)
 		{
 			int parWidth = width >> level - 1;
 			int mipWidth = width >> level;
@@ -256,6 +254,7 @@ public class TextureManager
 			}
 
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, level, GL11.GL_RGBA, mipWidth, mipHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, mipData1);
+			GL11.glAlphaFunc(GL11.GL_GEQUAL, 0.1F * level); // Create transparency for each level.
 
 			mipData = mipData1;
 		}
