@@ -81,7 +81,7 @@ public class ResourceDownloadThread extends Thread
 
 			file = new File(Minecraft.mcDir, "lwjgl-2.8.4.zip");
 
-			if(!file.exists())
+			if(!file.exists() && !new File(Minecraft.mcDir, "libs").exists() && !new File(Minecraft.mcDir, "native").exists())
 			{
 				url = new URL("http://downloads.sourceforge.net/project/java-game-lib/Official%20Releases/LWJGL%202.8.4/lwjgl-2.8.4.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjava-game-lib%2Ffiles%2FOfficial%2520Releases%2FLWJGL%25202.8.4%2F&ts=1349465612&use_mirror=hivelocity");
 				rbc = Channels.newChannel(url.openStream());

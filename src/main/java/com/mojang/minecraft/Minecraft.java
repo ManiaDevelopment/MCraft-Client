@@ -247,6 +247,52 @@ public final class Minecraft implements Runnable {
    public final void run() {
       this.running = true;
 
+	   String folder = "mcraft/client";
+	   String home = System.getProperty("user.home", ".");
+	   String osName = System.getProperty("os.name").toLowerCase();
+	   File minecraftFolder;
+	   switch(OperatingSystemLookup.lookup[
+			   (osName.contains("win") ? Minecraft$OS.windows : (osName.contains("mac")
+					   ? Minecraft$OS.macos : (osName.contains("solaris")
+					   ? Minecraft$OS.solaris : (osName.contains("sunos")
+					   ? Minecraft$OS.solaris : (osName.contains("linux")
+					   ? Minecraft$OS.linux : (osName.contains("unix") ? Minecraft$OS.linux : Minecraft$OS.unknown)))))).ordinal()])
+	   {
+		   case 1:
+			   System.out.println("UNKNOWN OS!!!");
+
+			   return;
+		   case 2:
+			   minecraftFolder = new File(home, '.' + folder + '/');
+			   break;
+		   case 3:
+			   String appData = System.getenv("APPDATA");
+
+			   if(appData != null)
+			   {
+				   minecraftFolder = new File(appData, "." + folder + '/');
+			   } else {
+				   minecraftFolder = new File(home, '.' + folder + '/');
+			   }
+			   break;
+		   case 4:
+			   minecraftFolder = new File(home, "Library/Application Support/" + folder);
+			   break;
+		   default:
+			   minecraftFolder = new File(home, folder + '/');
+	   }
+
+	   if(!minecraftFolder.exists() && !minecraftFolder.mkdirs())
+	   {
+		   throw new RuntimeException("The working directory could not be created: " + minecraftFolder);
+	   }
+
+	   mcDir = minecraftFolder;
+
+	   //-Djava.library.path=native/windows
+	   System.setProperty("org.lwjgl.librarypath", mcDir + "/native/windows");
+	   System.setProperty("net.java.games.input.librarypath", mcDir + "/native/windows");
+
       try {
          Minecraft var1 = this;
          if(this.canvas != null) {
@@ -297,36 +343,8 @@ public final class Minecraft implements Runnable {
          GL11.glLoadIdentity();
          GL11.glMatrixMode(5888);
          checkGLError("Startup");
-         String var3 = "mcraft/client";
-         String var5 = System.getProperty("user.home", ".");
-         String var6;
-         File var7;
-         switch(OperatingSystemLookup.lookup[((var6 = System.getProperty("os.name").toLowerCase()).contains("win")?Minecraft$OS.windows:(var6.contains("mac")?Minecraft$OS.macos:(var6.contains("solaris")?Minecraft$OS.solaris:(var6.contains("sunos")?Minecraft$OS.solaris:(var6.contains("linux")?Minecraft$OS.linux:(var6.contains("unix")?Minecraft$OS.linux:Minecraft$OS.unknown)))))).ordinal()]) {
-         case 1:
-         case 2:
-            var7 = new File(var5, '.' + var3 + '/');
-            break;
-         case 3:
-            String var8;
-            if((var8 = System.getenv("APPDATA")) != null) {
-               var7 = new File(var8, "." + var3 + '/');
-            } else {
-               var7 = new File(var5, '.' + var3 + '/');
-            }
-            break;
-         case 4:
-            var7 = new File(var5, "Library/Application Support/" + var3);
-            break;
-         default:
-            var7 = new File(var5, var3 + '/');
-         }
-
-         if(!var7.exists() && !var7.mkdirs()) {
-            throw new RuntimeException("The working directory could not be created: " + var7);
-         }
-
-         mcDir = var7;
-         this.settings = new GameSettings(this, var7);
+         //
+         this.settings = new GameSettings(this, minecraftFolder);
          this.textureManager = new TextureManager(this.settings);
          this.textureManager.registerAnimation(new TextureLavaFX());
          this.textureManager.registerAnimation(new TextureWaterFX());
