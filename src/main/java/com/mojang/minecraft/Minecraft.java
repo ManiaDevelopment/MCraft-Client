@@ -289,12 +289,15 @@ public final class Minecraft implements Runnable {
 
 		mcDir = minecraftFolder;
 
-		//-Djava.library.path=native/windows
-		System.setProperty("org.lwjgl.librarypath", mcDir + "/native/windows");
-		System.setProperty("net.java.games.input.librarypath", mcDir + "/native/windows");
-
 		try {
 			Minecraft var1 = this;
+
+			var1.resourceThread = new ResourceDownloadThread(mcDir, var1);
+			var1.resourceThread.run();
+
+			System.setProperty("org.lwjgl.librarypath", mcDir + "/native/windows");
+			System.setProperty("net.java.games.input.librarypath", mcDir + "/native/windows");
+
 			if(this.canvas != null) {
 				Display.setParent(this.canvas);
 			} else if(this.fullscreen) {
@@ -415,8 +418,8 @@ public final class Minecraft implements Runnable {
 					var4.running = false;
 				}
 
-				var1.resourceThread = new ResourceDownloadThread(mcDir, var1);
-				var1.resourceThread.start();
+				//var1.resourceThread = new ResourceDownloadThread(mcDir, var1);
+				//var1.resourceThread.start();
 			} catch (Exception var52) {
 				;
 			}
