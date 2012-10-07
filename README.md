@@ -1,4 +1,4 @@
-![Logo](http://i47.tinypic.com/2ynp1kl.png)
+![Logo](http://i47.tinypic.com/t98hox.png)
 ## MCraft-Client
 A stable Minecraft Classic client designed to make your Minecraft Classic experience more enjoyable without playing in your browser.
 
