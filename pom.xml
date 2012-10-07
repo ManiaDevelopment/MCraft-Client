@@ -73,10 +73,9 @@
         <url>https://github.com/ManiaDevelopment/MCraft-Client/issues</url>
     </issueManagement>
     <scm>
-        <connection>git@github.com:ManiaDevelopment/MCraft-Client.git</connection>
-        <developerConnection>git@github.com:ManiaDevelopment/MCraft-Client.git</developerConnection>
-        <tag>master</tag>
-        <url>https://github.com/ManiaDevelopment/MCraft-Client</url>
+        <connection>scm:git:git@github.com:ManiaDevelopment/MCraft-Client.git</connection>
+        <developerConnection>scm:git:git@github.com:ManiaDevelopment/MCraft-Client.git</developerConnection>
+        <url>git@github.com:ManiaDevelopment/MCraft-Client.git</url>
     </scm>
 
 

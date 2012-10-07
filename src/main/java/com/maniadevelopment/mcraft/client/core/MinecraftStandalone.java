@@ -24,6 +24,13 @@ import java.util.Map;
  */
 public class MinecraftStandalone
 {
+	public static void main(String[] args)
+	{
+		MinecraftStandalone minecraftStandalone = new MinecraftStandalone();
+
+		minecraftStandalone.startMinecraft();
+	}
+
 	/**
 	 * Default constructor.
 	 */
@@ -94,7 +101,6 @@ public class MinecraftStandalone
 
 			new Thread(new Runnable()
 			{
-				@Override
 				public void run()
 				{
 					while(true)
