@@ -292,6 +292,8 @@ public final class Minecraft implements Runnable {
 		try {
 			Minecraft var1 = this;
 
+			JOptionPane.showMessageDialog(null, "Welcome to the MCraft Client Alpha 1 Test.\nPlease press OK and give MCraft Client up to 30 seconds to download required files...", "Welcome to MCraft Client", JOptionPane.OK_OPTION);
+
 			var1.resourceThread = new ResourceDownloadThread(mcDir, var1);
 			var1.resourceThread.run();
 
