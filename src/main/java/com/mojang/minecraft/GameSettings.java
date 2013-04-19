@@ -12,9 +12,9 @@ public final class GameSettings
 {
 	public GameSettings(Minecraft minecraft, File minecraftFolder)
 	{
-		bindings = new KeyBinding[] {forwardKey, leftKey, backKey, rightKey, jumpKey, buildKey, chatKey, toggleFogKey, saveLocationKey, loadLocationKey, runKey};
+		bindings = new KeyBinding[] {forwardKey, leftKey, backKey, rightKey, jumpKey, inventoryKey, chatKey, toggleFogKey, saveLocationKey, loadLocationKey, runKey};
 
-		settingCount = 9;
+		settingCount = 10;
 
 		this.minecraft = minecraft;
 
@@ -37,7 +37,7 @@ public final class GameSettings
 	public KeyBinding backKey = new KeyBinding("Back", 31);
 	public KeyBinding rightKey = new KeyBinding("Right", 32);
 	public KeyBinding jumpKey = new KeyBinding("Jump", 57);
-	public KeyBinding buildKey = new KeyBinding("Build", 48);
+	public KeyBinding inventoryKey = new KeyBinding("Inventory", 18);
 	public KeyBinding chatKey = new KeyBinding("Chat", 20);
 	public KeyBinding toggleFogKey = new KeyBinding("Toggle fog", 33);
 	public KeyBinding saveLocationKey = new KeyBinding("Save location", 28);
@@ -49,6 +49,8 @@ public final class GameSettings
 
 	public int smoothing = 0;
 	public String[] smoothingOptions = new String[] {"OFF", "Automatic", "Universal"};
+	public int anisotropic = 0;
+	public String[] anisotropicOptions = new String[] {"OFF", "ON"};
 
 	public KeyBinding runKey = new KeyBinding("Run", Keyboard.KEY_LSHIFT);
 
@@ -158,6 +160,21 @@ public final class GameSettings
 			minecraft.levelRenderer.refresh();
 		}
 
+		if(setting == 9)
+		{
+			if(anisotropic == anisotropicOptions.length - 1)
+			{
+				anisotropic = 0;
+			} else {
+				anisotropic++;
+			}
+
+			minecraft.textureManager.textures.clear();
+			minecraft.textureManager.textureImages.clear();
+
+			minecraft.levelRenderer.refresh();
+		}
+
 		save();
 	}
 
@@ -172,7 +189,8 @@ public final class GameSettings
 				: (id == 6 ? "3d anaglyph: " + (anaglyph ? "ON" : "OFF")
 				: (id == 7 ? "Limit framerate: " + (limitFramerate ? "ON" : "OFF")
 				: (id == 8 ? "Smoothing: " + smoothingOptions[smoothing]
-				: ""))))))));
+				: (id == 9 ? "Anisotropic: " + anisotropicOptions[anisotropic]
+				: "")))))))));
 	}
 
 	private void load()
@@ -235,6 +253,11 @@ public final class GameSettings
 						smoothing = Integer.parseInt(setting[1]);
 					}
 
+					if(setting[0].equals("anisotropic"))
+					{
+						anisotropic = Integer.parseInt(setting[1]);
+					}
+
 					for(int index = 0; index < this.bindings.length; index++)
 					{
 						if(setting[0].equals("key_" + bindings[index].name))
@@ -269,6 +292,7 @@ public final class GameSettings
 			writer.println("limitFramerate:" + limitFramerate);
 
 			writer.println("smoothing:" + smoothing);
+			writer.println("anisotropic:" + anisotropic);
 
 			for(int binding = 0; binding < bindings.length; binding++)
 			{

@@ -1,4 +1,4 @@
-import com.maniadevelopment.mcraft.client.core.MinecraftStandalone;
+import com.oyasunadev.mcraft.client.core.MinecraftStandalone;
 
 
 /**

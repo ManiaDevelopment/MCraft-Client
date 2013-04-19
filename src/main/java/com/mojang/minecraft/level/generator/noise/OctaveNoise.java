@@ -20,13 +20,13 @@ public class OctaveNoise extends Noise
 	public double compute(double x, double z)
 	{
 		double result = 0.0D;
-		double unknown0 = 1.0D;
+		double noiseLevel = 1.0D; //unknown0
 
 		for(int count = 0; count < octaves; count++)
 		{
-			result += perlin[count].compute(x / unknown0, z / unknown0) * unknown0;
+			result += perlin[count].compute(x / noiseLevel, z / noiseLevel) * noiseLevel;
 
-			unknown0 *= 2.0D;
+			noiseLevel *= 2.0D;
 		}
 
 		return result;

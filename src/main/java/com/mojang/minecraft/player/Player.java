@@ -11,22 +11,8 @@ import org.lwjgl.opengl.GL11;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Player extends Mob {
-
-	public static final long serialVersionUID = 0L;
-	public static final int MAX_HEALTH = 20;
-	public static final int MAX_ARROWS = 99;
-	public transient InputHandler input;
-	public Inventory inventory = new Inventory();
-	public byte userType = 0;
-	public float oBob;
-	public float bob;
-	public int score = 0;
-	public int arrows = 20;
-	private static int newTextureId = -1;
-	public static BufferedImage newTexture;
-
-
+public class Player extends Mob
+{
 	public Player(Level var1) {
 		super(var1);
 		if(var1 != null) {
@@ -42,18 +28,7 @@ public class Player extends Mob {
 		this.ai = new Player$1(this);
 	}
 
-	public void resetPos() {
-		this.heightOffset = 1.62F;
-		this.setSize(0.6F, 1.8F);
-		super.resetPos();
-		if(this.level != null) {
-			this.level.player = this;
-		}
-
-		this.health = 20;
-		this.deathTime = 0;
-	}
-
+	@Override
 	public void aiStep() {
 		this.inventory.tick();
 		this.oBob = this.bob;
@@ -85,7 +60,92 @@ public class Player extends Mob {
 
 	}
 
+	@Override
+	public void bindTexture(TextureManager var1) {
+		if(newTexture != null) {
+			newTextureId = var1.load(newTexture);
+			newTexture = null;
+		}
+
+		int var2;
+		if(newTextureId < 0) {
+			var2 = var1.load("/char.png");
+			GL11.glBindTexture(3553, var2);
+		} else {
+			var2 = newTextureId;
+			GL11.glBindTexture(3553, var2);
+		}
+	}
+
+	@Override
 	public void render(TextureManager var1, float var2) {}
+
+	@Override
+	public void resetPos() {
+		this.heightOffset = 1.62F;
+		this.setSize(0.6F, 1.8F);
+		super.resetPos();
+		if(this.level != null) {
+			this.level.player = this;
+		}
+
+		this.health = 20;
+		this.deathTime = 0;
+	}
+
+	@Override
+	public void die(Entity var1) {
+		this.setSize(0.2F, 0.2F);
+		this.setPos(this.x, this.y, this.z);
+		this.yd = 0.1F;
+		if(var1 != null) {
+			this.xd = -MathHelper.cos((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
+			this.zd = -MathHelper.sin((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
+		} else {
+			this.xd = this.zd = 0.0F;
+		}
+
+		this.heightOffset = 0.1F;
+	}
+
+	@Override
+	public boolean isShootable() {
+		return true;
+	}
+
+	@Override
+	public void awardKillScore(Entity var1, int var2) {
+		this.score += var2;
+	}
+
+	@Override
+	public void remove() {}
+
+	@Override
+	public void hurt(Entity var1, int var2) {
+		if(!this.level.creativeMode) {
+			super.hurt(var1, var2);
+		}
+
+	}
+
+	@Override
+	public boolean isCreativeModeAllowed() {
+		return true;
+	}
+
+	public static final long serialVersionUID = 0L;
+	public static final int MAX_HEALTH = 20;
+	public static final int MAX_ARROWS = 99;
+	public transient InputHandler input;
+	public Inventory inventory = new Inventory();
+	public byte userType = 0;
+	public float oBob;
+	public float bob;
+	public int score = 0;
+	public int arrows = 20;
+	private static int newTextureId = -1;
+	public static BufferedImage newTexture;
 
 	public void releaseAllKeys() {
 		this.input.resetKeys();
@@ -106,56 +166,4 @@ public class Player extends Mob {
 	public HumanoidModel getModel() {
 		return (HumanoidModel)modelCache.getModel(this.modelName);
 	}
-
-	public void die(Entity var1) {
-		this.setSize(0.2F, 0.2F);
-		this.setPos(this.x, this.y, this.z);
-		this.yd = 0.1F;
-		if(var1 != null) {
-			this.xd = -MathHelper.cos((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
-			this.zd = -MathHelper.sin((this.hurtDir + this.yRot) * 3.1415927F / 180.0F) * 0.1F;
-		} else {
-			this.xd = this.zd = 0.0F;
-		}
-
-		this.heightOffset = 0.1F;
-	}
-
-	public void remove() {}
-
-	public void awardKillScore(Entity var1, int var2) {
-		this.score += var2;
-	}
-
-	public boolean isShootable() {
-		return true;
-	}
-
-	public void bindTexture(TextureManager var1) {
-		if(newTexture != null) {
-			newTextureId = var1.load(newTexture);
-			newTexture = null;
-		}
-
-		int var2;
-		if(newTextureId < 0) {
-			var2 = var1.load("/char.png");
-			GL11.glBindTexture(3553, var2);
-		} else {
-			var2 = newTextureId;
-			GL11.glBindTexture(3553, var2);
-		}
-	}
-
-	public void hurt(Entity var1, int var2) {
-		if(!this.level.creativeMode) {
-			super.hurt(var1, var2);
-		}
-
-	}
-
-	public boolean isCreativeModeAllowed() {
-		return true;
-	}
-
 }

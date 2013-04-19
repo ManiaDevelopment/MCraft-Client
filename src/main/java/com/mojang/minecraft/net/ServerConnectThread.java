@@ -1,6 +1,6 @@
 package com.mojang.minecraft.net;
 
-import com.maniadevelopment.mcraft.client.util.Constants;
+import com.oyasunadev.mcraft.client.util.Constants;
 import com.mojang.minecraft.Minecraft;
 import com.mojang.minecraft.gui.ErrorScreen;
 import com.mojang.net.NetworkHandler;

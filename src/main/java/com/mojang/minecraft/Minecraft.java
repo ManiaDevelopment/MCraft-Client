@@ -42,6 +42,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 
 import javax.sound.sampled.AudioFormat;
@@ -292,7 +293,16 @@ public final class Minecraft implements Runnable {
 		try {
 			Minecraft var1 = this;
 
-			JOptionPane.showMessageDialog(null, "Welcome to the MCraft Client Alpha 1 Test.\nPlease press OK and give MCraft Client up to 30 seconds to download required files...", "Welcome to MCraft Client", JOptionPane.OK_OPTION);
+			if(minecraftFolder.exists())
+			{
+			} else {
+				JOptionPane.showMessageDialog(null,
+						"Welcome to the MCraft Client Alpha 1!" +
+								"\nPleave give MCraft some time to download required files." +
+								"\nTHIS CAN TAKE A LONG TIME DEPENDING ON YOUR INTERNET SPEED.",
+						"Welcome to MCraft Client",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 
 			var1.resourceThread = new ResourceDownloadThread(mcDir, var1);
 			var1.resourceThread.run();
@@ -314,6 +324,7 @@ public final class Minecraft implements Runnable {
 
 			try {
 				Display.create();
+				//Display.create(new PixelFormat(8, 16, 0, 16));
 			} catch (LWJGLException var57) {
 				var57.printStackTrace();
 
@@ -1657,7 +1668,7 @@ public final class Minecraft implements Runnable {
 							--this.player.arrows;
 						}
 
-						if(Keyboard.getEventKey() == this.settings.buildKey.key) {
+						if(Keyboard.getEventKey() == this.settings.inventoryKey.key) {
 							this.gamemode.openInventory();
 						}
 
