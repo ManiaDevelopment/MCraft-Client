@@ -23,4 +23,4 @@ Join the official IRC channels for talk about MCraft.
 ## License
 The original Minecraft Classic source code is Copyright (c) 2009-2012 Mojang AB.
 <br>
-The MCraft-Client code is licensed under the <b>[Attribution-NonCommercial-NoDerivs 3.0 Unported](http://creativecommons.org/licenses/by-nc-nd/3.0/)</b>.
+The MCraft-Client code is licensed under the <b>[Creatite Commons Attribution-NonCommercial-NoDerivs 3.0 Unported](http://creativecommons.org/licenses/by-nc-nd/3.0/)</b>.
